@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 알바 토크 게시판  -->
+<mapper namespace="boardTalk">
+	<!-- .....INSERT..... -->
+	<!-- 글 등록: INSERT  -->
+	<insert id="insertBoardTalk" parameterType="boardTalkVO">
+		INSERT INTO BOARDTALK(BOARDTALK_seq, BOARD_CD, COMMENT_seq, TITLE, WRITER, READNUM, REGDATE, CONTENT, ID)
+		VALUES(SEQ_BOARDTALK_SEQ.NEXTVAL, #{board_cd}, #{comment_seq}, #{title}, #{writer}, #{readnum}, SYSDATE, #{content}, #{id})
+	</insert>
+	
+	<!-- 페이징 처리하기위해서 얼마나 가져올지 정하기 -->
+	<select id="selecthowmany" resultType="int">
+		select count(boardtalk_seq) as count
+		from boardtalk
+	</select>
+	<!-- 모두 가져오기 -->
+	<select id="selectAll" resultMap="boardTalkVOMap">
+		select *
+		from boardtalk
+	</select>
+	<!-- 태그별로 가져오기 -->
+	<select id="selectbytag" parameterType="String" resultMap="boardTalkVOMap">
+		select *
+		from boardtalk
+		where tag = #{tagname}
+		order by readnum desc
+	</select>
+	 <!-- 페이지별로 가져오기 -->
+	 <select id="selectGetpage" parameterType="map" resultMap="boardTalkVOMap">
+	 	select *
+		from
+		(
+		select rownum rnum ,boardtalk_seq ,title , id , regdate , readnum,tag from boardtalk order by title
+		)
+		where rnum between #{spage} and #{epage}
+	 </select>
+	 <!-- 마지막 step 가져오기 -->
+	 <select id="selectfeednum"  parameterType="int" resultType="int">
+	 	select max(step) as step
+		from boardcomment
+		where BOARDTALK_seq=#{boardtalk_seq}
+	 </select>
+	 <!-- 댓글달기 -->
+	 <insert id="insertReply" parameterType="commentvo">
+	 	insert into boardcomment(comment_seq,comment_content,BOARDTALK_seq,id,step,lvl,regDate) 
+		values(seq_COMMENT_seq.nextval,#{comment_content},#{boardtalk_seq},#{id},
+		NVL(((select max(step)from boardcomment where BOARDTALK_seq =#{boardtalk_seq})+1),0),#{lvl},SYSDATE)
+	 </insert>
+	 <!-- 모든댓글 가져오기 -->
+	 <select id="selectcommentall" resultMap="commentvomap" parameterType="int">
+	 	select *
+		from boardcomment
+		where BOARDTALK_seq=#{boardtalk_seq}
+        order by step
+	 </select>
+	 
+	 
+	<!-- 글 SELECT -->
+	<select id="selectBoardTalkOne" parameterType="int" resultMap="boardTalkVOMap">
+		SELECT * 
+		FROM BOARDTALK
+		WHERE BOARDTALK_seq = #{boardtalk_seq}
+	</select>
+	
+	<!-- 조회수 올리기 -->
+	<update id="updateread" parameterType="int">
+		Update BOARDTALK
+		SET readnum=readnum+1
+		where boardtalk_seq=#{boardtalk_seq}
+	</update>
+	
+	
+	<!-- 한 개인의 이력서 전체를 가져온다. -->
+	<select id="selectBoardTalkAll" resultMap="boardTalkVOMap">
+		SELECT * 
+		FROM BOARDTALK
+	</select>
+	
+	<!-- 글 수정: 글 제목과 글쓴이, 제목을 수정한다. -->
+	<update id="updateBoardTalk" parameterType="int">
+		Update BOARDTALK
+		SET title = #{title}, writer = #{writer}, content = #{content} 
+		WHERE boardtalk_seq = #{boardtalk_seq}
+	</update>
+	<!-- 이력서 삭제: DELETE -->
+	<delete id="deleteBoardTalk" parameterType="int">
+		DELETE FROM BOARDTALK
+		WHERE boardtalk_seq = #{boardtalk_seq}
+	</delete>
+	<!-- .....ResultMap..... -->
+	<!-- ResultMap: boardTalkVOMap 테이블(알바토크) -->
+	<resultMap type="boardTalkVO" id="boardTalkVOMap">
+		<result column="boardtalk_seq" jdbcType="INTEGER" 
+			property="boardtalk_seq" javaType="Integer"/>	<!-- 알바 토크 게시판 글 번호 -->
+		<result column="board_cd" jdbcType="VARCHAR" 
+			property="board_cd" javaType="String"/> <!-- 게시판 코드 -->
+		<result column="title" jdbcType="VARCHAR" 
+			property="title" javaType="String"/> <!-- 제목 -->
+		<result column="comment_seq" jdbcType="INTEGER" 
+			property="comment_seq" javaType="Integer"/> <!-- 제목 -->
+		<result column="readnum" jdbcType="INTEGER" 
+			property="readnum" javaType="Integer"/> <!-- 조회수 -->
+		<result column="regdate" jdbcType="DATE" 
+			property="regdate" javaType="String"/> <!-- 등록날짜 -->
+		<result column="content" jdbcType="VARCHAR" 
+			property="content" javaType="String"/> <!-- 글 내용 -->
+		<result column="id" jdbcType="VARCHAR" 
+			property="id" javaType="String"/> <!-- 아이디 -->
+			<result column="tag" jdbcType="VARCHAR" 
+			property="tag" javaType="String"/> <!-- 태그이름 -->
+	</resultMap>
+	<!-- 댓글 resultmap -->
+	<resultMap type="commentvo" id="commentvomap">
+		<result column="comment_seq" jdbcType="INTEGER" 
+			property="comment_seq" javaType="Integer"/>	
+		<result column="comment_content" jdbcType="VARCHAR" 
+			property="comment_content" javaType="String"/> 
+		<result column="boardtalk_seq" jdbcType="INTEGER" 
+			property="boardtalk_seq" javaType="Integer"/> 
+		<result column="id" jdbcType="VARCHAR" 
+			property="id" javaType="String"/> 
+		<result column="step" jdbcType="INTEGER" 
+			property="step" javaType="Integer"/> 
+		<result column="lvl" jdbcType="INTEGER" 
+			property="lvl" javaType="Integer"/> 
+		<result column="regdate" jdbcType="DATE" 
+			property="regdate" javaType="String"/>
+	</resultMap>
+</mapper>

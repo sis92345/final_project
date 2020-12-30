@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  고객센터  -->
+<mapper namespace="boardNotice">
+	<!-- .....INSERT..... -->
+	<!-- 글 등록: INSERT  -->
+	<insert id="insertboardNotice" parameterType="boardNoticeVO">
+		INSERT INTO BOARDNOTICE(BOARDNOTICE_seq, BOARD_CD, id, TITLE, WRITER, READNUM, REGDATE, CONTENT)
+		VALUES(SEQ_BOARDNOTICE_SEQ.NEXTVAL,#{board_cd},#{id},#{title},#{writer},#{readnum},SYSDATE,#{content})
+	</insert>
+	
+	<!-- 글 SELECT -->
+	<select id="selectboardNoticeOne" parameterType="int" resultMap="boardNoticeVOMap">
+		SELECT * 
+		FROM BOARDNOTICE
+		WHERE boardnotice_seq = #{boardnotice_seq}
+	</select>
+	
+	<!-- 게시판 전체글을 가져온다. -->
+	<select id="selectboardNoticeAll" resultMap="boardNoticeVOMap">
+		SELECT * 
+		FROM BOARDNOTICE
+	</select>
+	
+	<!-- 글 수정: 글 제목과 글쓴이, 제목을 수정한다. -->
+	<update id="updateboardNotice" parameterType="boardNoticeVO">
+		Update BOARDNOTICE
+		SET title = #{title}, writer = #{writer}, content = #{content}
+		WHERE boardnotice_seq = #{boardnotice_seq}
+	</update>
+	<!-- 이력서 삭제: DELETE -->
+	<delete id="deleteboardNotice" parameterType="int">
+		DELETE FROM BOARDNOTICE
+		WHERE boardnotice_seq = #{boardnotice_seq}
+	</delete>
+	<!-- .....ResultMap..... -->
+	<!-- ResultMap: boardTalkVOMap 테이블(알바토크) -->
+	<resultMap type="boardNoticeVO" id="boardNoticeVOMap">
+		<result column="boardnotice_seq" jdbcType="INTEGER" 
+			property="boardnotice_seq" javaType="Integer"/>	<!-- 고객센터 게시판 글 번호 -->
+		<result column="board_cd" jdbcType="VARCHAR" 
+			property="board_cd" javaType="String"/> <!-- 게시판 코드 -->
+		<result column="id" jdbcType="VARCHAR" 
+			property="id" javaType="String"/> <!-- 아이디 -->
+		<result column="title" jdbcType="VARCHAR" 
+			property="title" javaType="String"/> <!-- 제목 -->
+		<result column="writer" jdbcType="VARCHAR" 
+			property="writer" javaType="String"/> <!--  글쓴이 -->
+		<result column="readnum" jdbcType="INTEGER" 
+			property="readnum" javaType="Integer"/> <!-- 조회수 -->
+		<result column="regdate" jdbcType="DATE" 
+			property="regdate" javaType="String"/> <!-- 등록날짜 -->
+		<result column="content" jdbcType="VARCHAR" 
+			property="content" javaType="String"/> <!-- 글 내용 -->
+	</resultMap>
+</mapper>

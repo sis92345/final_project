@@ -1,0 +1,28 @@
+html,
+body {
+  /*background-image: url("../images/detail_background.jpg");*/
+ 
+}
+#contents {
+  padding: 2%;
+}
+#listdiv::-webkit-scrollbar,
+#content::-webkit-scrollbar,
+#resultlist::-webkit-scrollbar {
+  display: none !important;
+}
+/* Mobile Device */
+@media screen and (max-width: 767px) {
+  
+ 
+}
+
+/* Tablet Device */
+@media screen and (min-width: 768px) and (max-width: 1207px) {
+
+}
+
+/* Desktop Device */
+@media screen and (min-width: 1208px) {
+
+}

@@ -1,0 +1,16 @@
+
+
+
+#sidemenu{
+	display:none;	
+}
+
+@media screen and (max-width: 1000px) {
+	.die{
+		display:none !important; 
+		
+		}
+		#sidemenu{
+	display:block;	
+}
+}

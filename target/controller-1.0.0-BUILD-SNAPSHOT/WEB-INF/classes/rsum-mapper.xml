@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rsum">
+	<!-- .....INSERT..... -->
+	<!-- 이력서 등록: INSERT  -->
+	<insert id="insertRsum" parameterType="rsumVO">
+		INSERT INTO Rsum(rsum_seq, id, title, name, academic_ability, local, business_type, work_type, work_time, work_date, work_content) 
+		VALUES(SEQ_RSUM_SEQ.NEXTVAL, #{id}, #{title}, #{name}, #{academic_ability}, #{local}, #{business_type}, #{work_type}, #{work_time}, #{work_date}, #{work_content})
+	</insert>
+	
+	<!-- 이력서 회원 SELECT -->
+	<select id="selectRsumOne" parameterType="int" resultMap="rsumVOMap">
+		SELECT * 
+		FROM RSUM
+		WHERE rsum_seq = #{rsum_seq}
+	</select>
+	
+	<!-- 한 개인의 이력서 전체를 가져온다. -->
+	<select id="selectRsumAll" parameterType="String" resultMap="rsumVOMap">
+		SELECT * 
+		FROM RSUM
+		WHERE id = #{id}
+	</select>
+	
+	<!-- 이력서 업데이트: 전화번호 바꿈, 해당 유저의 원하는 이력서를 수정한다. -->
+	<update id="updateRsum" parameterType="rsumVO">
+		Update Rsum
+		SET title = #{title}, name = #{name}, academic_ability = #{academic_ability}, 
+			local = #{local}, business_type = #{business_type}, work_type = #{work_type}, work_time = #{work_time}, 
+			work_date = #{work_date}, work_content = #{work_content}
+		WHERE id = #{id} AND rsum_seq = #{rsum_seq}
+	</update>
+	<!-- 이력서 삭제: DELETE -->
+	<delete id="deleteRsum" parameterType="rsumVO">
+		DELETE FROM Rsum
+		WHERE id = #{id} AND RSUM_SEQ = #{rsum_seq}
+	</delete>
+	<!-- .....ResultMap..... -->
+	<!-- ResultMap: rsumVOMap 테이블(이력서) -->
+	<resultMap type="rsumVO" id="rsumVOMap">
+		<result column="rsum_seq" jdbcType="INTEGER" 
+			property="rsum_seq" javaType="Integer"/>	<!-- 이력서 번호 -->
+		<result column="id" jdbcType="VARCHAR" 
+			property="id" javaType="String"/> <!-- 아이디 -->
+		<result column="title" jdbcType="VARCHAR" 
+			property="title" javaType="String"/> <!-- 제목 -->
+		<result column="name" jdbcType="VARCHAR" 
+			property="name" javaType="String"/> <!-- 글쓴이 -->
+		<result column="academic_ability" jdbcType="VARCHAR" 
+			property="academic_ability" javaType="String"/> <!-- 최종학력 -->
+		<result column="local" jdbcType="VARCHAR" 
+			property="local" javaType="String"/> <!-- 희망 근무지 -->
+		<result column="business_type" jdbcType="VARCHAR" 
+			property="business_type" javaType="String"/> <!-- 희망 업직종 -->
+		<result column="work_type" jdbcType="VARCHAR" 
+			property="work_type" javaType="String"/> <!-- 희망 근무형태 -->
+		<result column="work_time" jdbcType="VARCHAR" 
+			property="work_time" javaType="String"/><!-- 희망 근무 일시 -->
+		<result column="work_date" jdbcType="VARCHAR" 
+			property="work_date" javaType="String"/><!-- 멤버 구분 -->
+		<result column="work_content" jdbcType="VARCHAR" 
+			property="work_content" javaType="String"/><!-- 이력서 내용 -->
+	</resultMap>
+</mapper>

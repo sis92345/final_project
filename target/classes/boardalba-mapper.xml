@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 공고 게시판  -->
+<mapper namespace="boardAlba">
+	<!-- .....INSERT..... -->
+	<!-- 글 등록: INSERT  -->
+	<insert id="insertboardAlba" parameterType="boardAlbaVO">
+		INSERT INTO BOARDALBA(BOARDALBA_seq, BOARD_CD, id, TITLE, WRITER, READNUM, REGDATE, CONTENT, CORPLOC, WORKDATE, WORKTIME,WOKRTYPE,sal )
+		VALUES(SEQ_BOARDALBA_SEQ.NEXTVAL,#{board_cd},#{id},#{title},#{writer},#{readnum},SYSDATE,#{content},#{corpLoc},#{workDate},#{workTime},#{workType},#{sal})
+	</insert>
+	
+	<!-- 글 SELECT -->
+	<select id="selectboardAlbaOne" parameterType="int" resultMap="BoardAlbaVOAllmap">
+		SELECT * 
+		FROM BOARDALBA natural join commember
+		WHERE boardalba_seq = #{boardalba_seq}
+	</select>
+	
+	<!-- 분야에맞는 글 select -->
+	<select id="selectboardAlbaJob" parameterType="String" resultMap="boardAlbaVOMap">
+		SELECT * 
+		FROM BOARDALBA
+		WHERE worktype = #{q}
+	</select>
+	
+	<!-- 쿼리에 맞는 제목 가져오기 select -->
+	<select id="selectboardAlbatitle" parameterType="String" resultMap="boardAlbaVOMap">
+		SELECT *
+		FROM BOARDALBA
+		WHERE title like '%'||#{query}||'%'
+		
+	</select>
+	
+	<!-- 조회수 높은순으로 가져오기 -->
+	<select id="selectviewcount" resultMap="boardAlbaVOMap">
+		select * from boardalba
+		order by readnum desc
+	</select>
+	
+	<!-- 최근에 올린순으로 가져오기 -->
+	<select id="selectcurrent" resultMap="boardAlbaVOMap">
+		select * from boardalba
+		order by regdate desc
+	</select>
+	
+	<!-- 게시판 전체글을 가져온다. -->
+	<select id="selectboardAlbaAll" resultMap="boardAlbaVOMap">
+		SELECT * 
+		FROM BOARDALBA
+	</select>
+	
+	<!-- 글 수정: 글 제목과 글쓴이, 제목을 수정한다. -->
+	<update id="updateboardAlba" parameterType="boardAlbaVO">
+		Update BOARDALBA
+		SET title = #{title}, writer = #{writer}, content = #{content},
+					corpLoc = #{corpLoc}, workDate = #{workDate}, 
+					workTime = #{workTime}, wokrType = #{workType}, sal = #{sal}
+		WHERE boardalba_seq = #{boardalba_seq}
+	</update>
+	<!-- 이력서 삭제: DELETE -->
+	<delete id="deleteboardAlba" parameterType="int">
+		DELETE FROM BOARDALBA
+		WHERE boardalba_seq = #{boardalba_seq}
+	</delete>
+	<!-- .....ResultMap..... -->
+	<!-- ResultMap: boardTalkVOMap 테이블(알바토크) -->
+	
+	<resultMap type="boardAlbaVO" id="boardAlbaVOMap">
+		<result column="boardalba_seq" jdbcType="INTEGER" 
+			property="boardalba_seq" javaType="Integer"/>	<!-- 공고 게시판 글 번호 -->
+		<result column="board_cd" jdbcType="VARCHAR" 
+			property="board_cd" javaType="String"/> <!-- 게시판 코드 -->
+		<result column="id" jdbcType="VARCHAR" 
+			property="id" javaType="String"/> <!-- 아이디(기업회원) -->
+		<result column="title" jdbcType="VARCHAR" 
+			property="title" javaType="String"/> <!-- 제목 -->
+		<result column="writer" jdbcType="VARCHAR" 
+			property="writer" javaType="String"/> <!--  글쓴이 -->
+		<result column="readnum" jdbcType="INTEGER" 
+			property="readnum" javaType="Integer"/> <!-- 조회수 -->
+		<result column="regdate" jdbcType="DATE" 
+			property="regdate" javaType="String"/> <!-- 등록날짜 -->
+		<result column="content" jdbcType="VARCHAR" 
+			property="content" javaType="String"/> <!-- 글 내용 -->
+		<result column="corploc" jdbcType="VARCHAR" 
+			property="corploc" javaType="String"/> <!-- 회사 위치 -->
+		<result column="workdate" jdbcType="VARCHAR" 
+			property="workdate" javaType="String"/> <!-- 근무 기간 -->
+		<result column="worktime" jdbcType="VARCHAR" 
+			property="worktime" javaType="String"/> <!-- 근무 일시 -->
+		<result column="worktype" jdbcType="VARCHAR" 
+			property="worktype" javaType="String"/> <!-- 근무형태 -->
+		<result column="sal" jdbcType="INTEGER" 
+			property="sal" javaType="Integer"/> <!-- 급여 -->
+	</resultMap>
+	
+	
+	<resultMap type="googlemapvo" id="googlemapvo">
+		<result column="boardalba_seq" jdbcType="INTEGER" 
+			property="boardalba_seq" javaType="Integer"/>	<!-- 공고 게시판 글 번호 -->
+		<result column="title" jdbcType="VARCHAR" 
+			property="title" javaType="String"/> <!-- 제목 -->
+		<result column="readnum" jdbcType="INTEGER" 
+			property="readnum" javaType="Integer"/> <!-- 조회수 -->
+		<result column="regdate" jdbcType="DATE" 
+			property="regdate" javaType="String"/> <!-- 등록날짜 -->
+		<result column="workDate" jdbcType="VARCHAR" 
+			property="workdate" javaType="String"/> <!-- 근무 기간 -->
+		<result column="workTime" jdbcType="VARCHAR" 
+			property="worktime" javaType="String"/> <!-- 근무 일시 -->
+		<result column="worktype" jdbcType="VARCHAR" 
+			property="worktype" javaType="String"/> <!-- 근무형태 -->
+		<result column="sal" jdbcType="INTEGER" 
+			property="sal" javaType="Integer"/> <!-- 급여 -->
+				<result column="company_name" jdbcType="VARCHAR" 
+			property="company_name" javaType="String"/> <!-- 회사이름 -->
+			<result column="address" jdbcType="VARCHAR" 
+			property="address" javaType="String"/> <!-- 주소 -->
+			<result column="longitude" jdbcType="NUMERIC" 
+			property="longitude" javaType="double"/> <!-- 경도 -->
+		<result column="latitude" jdbcType="NUMERIC" 
+			property="latitude" javaType="double"/><!-- 위도 -->
+			<result column="workcondition" jdbcType="VARCHAR" 
+			property="workcondition" javaType="String"/> 
+		<result column="gender" jdbcType="VARCHAR" 
+			property="gender" javaType="String"/>
+			<result column="age" jdbcType="INTEGER" 
+			property="age" javaType="Integer"/>
+			
+	</resultMap>
+	<select id="selectgooglemap" resultMap="googlemapvo">
+	select boardalba_seq,title,regdate,readnum,
+	company_name,address,sal,workdate,worktime,
+	worktype,longitude,latitude from boardalba 
+	natural join commember
+	</select>
+	
+	<resultMap type="BoardAlbaVOAll" id="BoardAlbaVOAllmap">
+		<result column="boardalba_seq" jdbcType="INTEGER" 
+			property="boardalba_seq" javaType="Integer"/>	<!-- 공고 게시판 글 번호 -->
+		<result column="board_cd" jdbcType="VARCHAR" 
+			property="board_cd" javaType="String"/> <!-- 게시판 코드 -->
+		<result column="id" jdbcType="VARCHAR" 
+			property="id" javaType="String"/> <!-- 아이디(기업회원) -->
+		<result column="title" jdbcType="VARCHAR" 
+			property="title" javaType="String"/> <!-- 제목 -->
+		<result column="writer" jdbcType="VARCHAR" 
+			property="writer" javaType="String"/> <!--  글쓴이 -->
+		<result column="readnum" jdbcType="INTEGER" 
+			property="readnum" javaType="Integer"/> <!-- 조회수 -->
+		<result column="regdate" jdbcType="DATE" 
+			property="regdate" javaType="String"/> <!-- 등록날짜 -->
+		<result column="content" jdbcType="VARCHAR" 
+			property="content" javaType="String"/> <!-- 글 내용 -->
+		<result column="corploc" jdbcType="VARCHAR" 
+			property="corploc" javaType="String"/> <!-- 회사 위치 -->
+		<result column="workdate" jdbcType="VARCHAR" 
+			property="workdate" javaType="String"/> <!-- 근무 기간 -->
+		<result column="worktime" jdbcType="VARCHAR" 
+			property="worktime" javaType="String"/> <!-- 근무 일시 -->
+		<result column="worktype" jdbcType="VARCHAR" 
+			property="worktype" javaType="String"/> <!-- 근무형태 -->
+		<result column="sal" jdbcType="INTEGER" 
+			property="sal" javaType="Integer"/> <!-- 급여 -->
+		<result column="company_name" jdbcType="VARCHAR" 
+			property="company_name" javaType="String"/> <!-- 회사이름 -->
+		<result column="password" jdbcType="VARCHAR" 
+			property="password" javaType="String"/> <!-- 비밀번호 -->
+		<result column="company_num" jdbcType="VARCHAR" 
+			property="company_num" javaType="String"/> <!-- 회사전화번호 -->
+		<result column="representative" jdbcType="VARCHAR" 
+			property="representative" javaType="String"/> <!-- 대표자명 -->
+		<result column="email" jdbcType="VARCHAR" 
+			property="email" javaType="String"/> <!-- 이메일 -->
+		<result column="address" jdbcType="VARCHAR" 
+			property="address" javaType="String"/> <!-- 주소 -->
+		<result column="longitude" jdbcType="VARCHAR" 
+			property="longitude" javaType="String"/> <!-- 경도 -->
+		<result column="latitude" jdbcType="VARCHAR" 
+			property="latitude" javaType="String"/><!-- 위도 -->
+			<result column="division" jdbcType="INTEGER" 
+			property="division" javaType="Integer"/><!-- 멤버 구분 -->
+			
+			<result column="workcondition" jdbcType="VARCHAR" 
+			property="workcondition" javaType="String"/> 
+		<result column="gender" jdbcType="VARCHAR" 
+			property="gender" javaType="String"/>
+			<result column="age" jdbcType="INTEGER" 
+			property="age" javaType="Integer"/>
+	</resultMap>
+	
+</mapper>

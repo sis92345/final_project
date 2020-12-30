@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="root">
+	
+	<select id="selectallmember" resultType="int">
+		select count(member.id) as allmember
+		from member
+	</select>
+	<select id="selectallgongo" resultType="int">
+		select count(boardalba_seq) as gongo
+		from boardalba
+	</select>
+	<select id="selecttodaygongo" resultType="int">
+		select count(boardalba_seq) as todaygongo
+		from boardalba
+		where to_char(regdate,'YYYY-MM-DD') >= to_char(sysdate,'YYYY-MM-DD')
+	</select>
+	
+</mapper>

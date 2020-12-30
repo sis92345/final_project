@@ -1,0 +1,89 @@
+td{
+    border-radius: 0.2em;
+}
+
+/* #selectTable{
+    margin-left: auto; 
+    margin-right: auto;
+    font-size: 30px;
+    border-collapse: separate;
+    border-spacing: 30px;
+}
+#selectTable td{
+    width: 580px;
+    height: 315px;
+    padding-top: 40px;
+    background-color: white;
+}
+#selectTable tr, #selectTable td{
+    border: 1px solid #c6d4d8;
+    border-spacing: 10px;
+    border-radius: 0.2em;
+}
+#signupTable{
+    border: 1px solid #c6d4d8;
+    margin-left: auto; 
+    margin-right: auto;
+    font-size: 20px;
+    background-color: white;
+    
+
+}
+#signupTable td{ 
+    border-top:1px solid #c6d4d8;
+    width: 455px;
+    height: 45px;
+    font-size: 15px;
+    
+}
+#signupTable th{ 
+    border-top:1px solid #c6d4d8;
+    font-weight: lighter;
+    font-size: 20px;
+    text-align: left;
+}
+.signupInput{
+    width: 455px;
+    height: 45px;
+    border:none;
+    border-right:0px; 
+    border-top:0px; 
+    border-left:0px; 
+    border-bottom:0px;
+    outline: none;
+}
+ul{
+    width: 580px;
+    height: 315px;
+    padding-top: 40px;
+}
+
+fieldset{
+    text-align:left;
+    display: inline-block;
+    vertical-align:middle;
+    width: 580px;
+    height: 200px;
+}
+.btn1{
+    font-size: 20px;
+}
+img{
+    width: 50px;
+    height: 50px;
+}
+#bizP, #guestP{
+    color: gray ;
+    font-size: 15px;
+}
+#btnPerson, #btnBiz{
+    width: 580px;
+    height: 95px;
+}
+#btnSignup button{
+  width: 280px;
+}
+#term{
+    overflow: scroll;
+    height: 50px;
+} */

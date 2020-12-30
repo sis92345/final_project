@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+	<!-- .....INSERT..... -->
+	<!-- 회원 가입(MemberTable):  -->
+	<insert id="insertMember" parameterType="albaMemberVO">
+		INSERT INTO MEMBER(id, password, division) 
+		VALUES(#{id}, #{password}, #{division})
+	</insert>
+	
+	<!-- 개인 회원 가입: INSERT  -->
+	<insert id="insertAlbaMember" parameterType="albaMemberVO">
+		INSERT INTO ALBAMEMBER(id, name, email, tel) 
+		VALUES(#{id}, #{name}, #{email},#{tel})
+	</insert>
+	<!-- 기업 회원 가입: INSERT  -->
+	<insert id="insertComMember" parameterType="comMemberVO">
+		INSERT INTO COMMEMBER(id, company_name, representative, company_num, email, address, latitude, longitude) 
+		VALUES(#{id}, #{company_name}, #{representative}, #{company_num}, #{email}, #{address}, #{latitude}, #{longitude})
+	</insert>
+	
+	<!-- 개인 회원 SELECT -->
+	<select id="selectAlbamemberOne" parameterType="String" resultMap="albaMemberVOMap">
+		SELECT id , name , email , tel , division
+		FROM MEMBER NATURAL JOIN albamember
+		WHERE id = #{id}
+	</select>
+	<!-- 기업 회원 SELECT -->
+	<select id="selectCommemberOne" parameterType="String" resultMap="comMemberVOMap">
+		SELECT *
+		FROM MEMBER NATURAL JOIN commember
+		WHERE id = #{id}
+	</select>
+	
+	<!-- 개인 회원 전체 SELECTALL -->
+	<select id="selectAlbamemberAll" resultMap="albaMemberVOMap">
+		SELECT * 
+		FROM MEMBER INNER JOIN ALBAMEMBER USING(id)
+	</select>
+	<!-- 기업 회원 전체 SELECTALL -->
+	<select id="selectCommemberAll" resultMap="comMemberVOMap">
+		SELECT * 
+		FROM MEMBER INNER JOIN COMMEMBER USING(id)
+	</select>
+	
+	<!-- 개인 회원 업데이트: 이메일, 전화번호 바꿈 -->
+	<update id="updateAlbamember" parameterType="AlbaMemberVO">
+		Update AlbaMember
+		SET name = #{name}, email = #{email}, tel = #{tel}
+		WHERE id = #{id}
+	</update>
+	<!-- 기업 회원 업데이트 -->
+	<update id="updateCommember" parameterType="ComMemberVO">
+		Update ComMember
+		SET company_name = #{company_name}, representative = #{representative}, company_num = #{company_num}, email = #{email}, address = #{address}, latitude = #{latitude}, longitude = #{longitude}
+		WHERE id = #{id}
+	</update>
+	<!-- 회원 삭제: DELETE -->
+	<delete id="deleteMember" parameterType="String">
+		DELETE FROM MEMBER
+		WHERE id = #{id}
+	</delete>
+	
+	<!-- 로그인하기 -->
+	<select id="login" parameterType="membervo" resultMap="loginmember">
+		select * from member
+		where id = #{id} AND password = #{password} AND division=${division}
+	</select>
+	
+	<!-- .....ResultMap..... -->
+	
+	<resultMap type="membervo" id="loginmember">
+		<result column="id" jdbcType="VARCHAR" 
+			property="id" javaType="String"/>	
+		<result column="password" jdbcType="VARCHAR" 
+			property="password" javaType="String"/> 
+		<result column="division" jdbcType="INTEGER" 
+			property="division" javaType="Integer"/> 
+	</resultMap>
+	
+	
+	<!-- ResultMap: albaMember 테이블(개인회원) -->
+	<resultMap type="albaMemberVO" id="albaMemberVOMap">
+		<result column="id" jdbcType="VARCHAR" 
+			property="id" javaType="String"/>	<!-- 아이디 -->
+		<result column="name" jdbcType="VARCHAR" 
+			property="name" javaType="String"/> <!-- 이름 -->
+		<result column="password" jdbcType="VARCHAR" 
+			property="password" javaType="String"/> <!-- 비밀번호 -->
+		<result column="tel" jdbcType="VARCHAR" 
+			property="tel" javaType="String"/> <!-- 전화번호 -->
+		<result column="email" jdbcType="VARCHAR" 
+			property="email" javaType="String"/> <!-- 이메일 -->
+		<result column="division" jdbcType="INTEGER" 
+			property="division" javaType="Integer"/><!-- 멤버 구분 -->
+	</resultMap>
+	
+	<!-- ResultMap: comMemberVOMap 테이블(기업회원) -->
+	<resultMap type="comMemberVO" id="comMemberVOMap">
+		<result column="id" jdbcType="VARCHAR" 
+			property="id" javaType="String"/>	<!-- 아이디 -->
+		<result column="company_name" jdbcType="VARCHAR" 
+			property="company_name" javaType="String"/> <!-- 회사이름 -->
+		<result column="password" jdbcType="VARCHAR" 
+			property="password" javaType="String"/> <!-- 비밀번호 -->
+		<result column="company_num" jdbcType="VARCHAR" 
+			property="company_num" javaType="String"/> <!-- 회사전화번호 -->
+		<result column="representative" jdbcType="VARCHAR" 
+			property="representative" javaType="String"/> <!-- 대표자명 -->
+		<result column="email" jdbcType="VARCHAR" 
+			property="email" javaType="String"/> <!-- 이메일 -->
+		<result column="address" jdbcType="VARCHAR" 
+			property="address" javaType="String"/> <!-- 주소 -->
+		<result column="longitude" jdbcType="VARCHAR" 
+			property="longitude" javaType="String"/> <!-- 경도 -->
+		<result column="latitude" jdbcType="VARCHAR" 
+			property="latitude" javaType="String"/><!-- 위도 -->
+			<result column="division" jdbcType="INTEGER" 
+			property="division" javaType="Integer"/><!-- 멤버 구분 -->
+	</resultMap>
+</mapper>

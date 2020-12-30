@@ -1,0 +1,40 @@
+html,
+body {
+  /*background-image: url("../images/detail_background.jpg");*/
+  
+}
+#list {
+  padding: 2%;
+}
+#listdiv {
+  -ms-overflow-style: none;
+}
+#contents {
+  -ms-overflow-style: none;
+  padding: 2%;
+}
+#listdiv::-webkit-scrollbar,
+#content::-webkit-scrollbar,
+#resultlist::-webkit-scrollbar {
+  display: none !important;
+}
+/* Mobile Device */
+@media screen and (max-width: 767px) {
+  
+  #contents {
+    width: 100%;
+  }
+}
+
+/* Tablet Device */
+@media screen and (min-width: 768px) and (max-width: 1207px) {
+  
+  #contents {
+    width: 100%;
+  }
+}
+
+/* Desktop Device */
+@media screen and (min-width: 1208px) {
+
+}

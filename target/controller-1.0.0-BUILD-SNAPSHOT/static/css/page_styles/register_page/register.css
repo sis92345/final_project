@@ -1,0 +1,14 @@
+#container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Mobile Device */
+@media screen and (max-width: 767px) {
+	
+	.die{
+		display:none;
+	}
+}

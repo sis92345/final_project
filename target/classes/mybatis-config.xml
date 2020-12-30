@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.example.vo.CommunityListVO" alias="CommunityListVO" />
+		<!-- 유저 관련 VO 등록 -->
+		<typeAlias type="com.example.vo.AlbaMemberVO" alias="albaMemberVO" />
+		<typeAlias type="com.example.vo.ComMemberVO" alias="comMemberVO" />
+		<typeAlias type="com.example.vo.RsumVO" alias="rsumVO" />
+		<typeAlias type="com.example.vo.BoardTalkVO" alias="boardTalkVO" />
+		<typeAlias type="com.example.vo.BoardAlbaVO" alias="boardAlbaVO" />
+		<typeAlias type="com.example.vo.BoardNoticeVO" alias="boardNoticeVO" />	
+		<typeAlias type="com.example.vo.GooglemapVO" alias="googlemapvo" />
+		<typeAlias type="com.example.vo.StatusVO" alias="statusvo" />
+		<typeAlias type="com.example.vo.CommentVO" alias="commentvo" />
+		<typeAlias type="com.example.vo.MemberVO" alias="membervo" />
+		<typeAlias type="com.example.vo.BoardAlbaVOAll" alias="BoardAlbaVOAll" />
+	</typeAliases>
+</configuration>
